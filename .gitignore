@@ -1,0 +1,10 @@
+
+.idea/
+
+db.sqlite3
+
+chop/__pycache__/
+
+productsapp/__pycache__/
+
+static/vendor/img/
