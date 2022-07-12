@@ -10,7 +10,7 @@ def index(request):
     return render(request, 'productsapp/index.html', context)
 
 
-def products(request):
+def products(request, category_id=None):
     context = {
         'title': 'Chop - Каталог',
         'categories': ProductCategory.objects.all,
@@ -24,4 +24,6 @@ def products(request):
         #     {'name': 'Темно-синие широкие строгие брюки ASOS DESIGN', 'price': '2 890,00', 'description': 'Легкая эластичная ткань сирсакер Фактурная ткань.', 'image': 'vendor/img/products/Dark-blue-wide-leg-ASOs-DESIGN-trousers.png'},
         # ]
     }
+    if category_id:
+        context['products'] = Product.objects.filter(category_id=category_id)
     return render(request, 'productsapp/products.html', context)
