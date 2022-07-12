@@ -13,6 +13,7 @@ def index(request):
 def products(request):
     context = {
         'title': 'Chop - Каталог',
+        'categories': ProductCategory.objects.all,
         'products': Product.objects.all()
         # 'products': [
         #     {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '6 090,00', 'description': 'Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.', 'image': 'vendor/img/products/Adidas-hoodie.png'},

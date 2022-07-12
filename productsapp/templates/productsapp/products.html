@@ -14,11 +14,17 @@
 
             <h1 class="my-4">Chop</h1>
             <div class="list-group">
-                <a href="#" class="list-group-item">Новинки</a>
-                <a href="#" class="list-group-item">Одежда</a>
-                <a href="#" class="list-group-item">Обувь</a>
-                <a href="#" class="list-group-item">Аксессуары</a>
-                <a href="#" class="list-group-item">Подарки</a>
+
+                {% for category in categories %}
+
+                    <a href="#" class="list-group-item">{{ category.name }}</a>
+<!--                <a href="#" class="list-group-item">Одежда</a>-->
+<!--                <a href="#" class="list-group-item">Обувь</a>-->
+<!--                <a href="#" class="list-group-item">Аксессуары</a>-->
+<!--                <a href="#" class="list-group-item">Подарки</a>-->
+
+                {% endfor %}
+
             </div>
 
         </div>
