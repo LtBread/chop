@@ -2,9 +2,9 @@ import os
 import json
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from pprint import pprint
 
 from productsapp.models import ProductCategory, Product
+from buyersapp.models import Buyer
 
 # Скрипт не работает из-за foreign key. При создании продукта он ссылается на несуществующее поле name.
 # На момент создания продукта ключ к категории является уже устаревшим.
@@ -38,4 +38,4 @@ class Command(BaseCommand):
             new_product = Product(**product['fields'])
             new_product.save()
 
-        superuser = User.objects.create_superuser('admin', '', '1')
+        superuser = Buyer.objects.create_superuser('admin', '', '1')
