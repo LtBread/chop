@@ -26,6 +26,11 @@ def login(request):
     return render(request, 'buyersapp/login.html', context)
 
 
+def registration(request):
+    context = {'title': 'Chop - Регистрация'}
+    return render(request, 'buyersapp/registration.html', context)
+
+
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('main'))
