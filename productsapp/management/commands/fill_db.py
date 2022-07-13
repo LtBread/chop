@@ -6,6 +6,9 @@ from pprint import pprint
 
 from productsapp.models import ProductCategory, Product
 
+# Скрипт не работает из-за foreign key. При создании продукта он ссылается на несуществующее поле name.
+# На момент создания продукта ключ к категории является уже устаревшим.
+
 # Путь к json-файлам, из которых восстанавливается БД
 JSON_PATH = 'productsapp/json/'
 
@@ -30,7 +33,7 @@ class Command(BaseCommand):
         Product.objects.all().delete()
         for product in products:
             category_name = product['fields']['category']
-            _category = ProductCategory.objects.get(name=category_name)
+            _category = ProductCategory.objects.get(name=category_name)  # вот тут
             product['fields']['category'] = _category
             new_product = Product(**product['fields'])
             new_product.save()
