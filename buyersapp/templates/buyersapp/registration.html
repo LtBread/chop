@@ -7,12 +7,20 @@
             <div class="row justify-content-center">
                 <div class="col-lg-7">
 
-                    {% if form.errors %}
+                    {% if messages or form.errors %}
 
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                        <div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
                              style="margin-top: 50px;">
 
-                            {{ form.errors }}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            {% else %}
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -36,7 +44,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="small mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
+                                            <label class="small mb-1"
+                                                   for="{{ form.last_name.id_for_label }}">Фамилия</label>
                                             {{ form.last_name }}
                                         </div>
                                     </div>
@@ -44,14 +53,16 @@
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="small mb-1" for="{{ form.age.id_for_label }}">Дата рождения</label>
+                                            <label class="small mb-1" for="{{ form.age.id_for_label }}">Дата
+                                                рождения</label>
                                             {{ form.age }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                                        <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя
+                                            пользователя</label>
                                         {{ form.username }}
                                     </div>
                                     <div class="col-md-6">
