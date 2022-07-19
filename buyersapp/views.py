@@ -40,16 +40,14 @@ def registration(request):
 
 
 def profile(request):
-    form = BuyersProfileForm(instance=request.user)
-
-    # if request.method == 'POST':
-    #     form = BuyersProfileForm(data=request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         messages.success(request, 'Данные успешно изменены!')
-    #         return HttpResponseRedirect(reverse('buyers:profile'))
-    # else:
-    #     form = BuyersProfileForm()
+    if request.method == 'POST':
+        form = BuyersProfileForm(instance=request.user, files=request.FILES, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные успешно изменены!')
+            return HttpResponseRedirect(reverse('buyers:profile'))
+    else:
+        form = BuyersProfileForm(instance=request.user)
 
     context = {'title': 'Chop - Личный кабинет', 'form': form}
     return render(request, 'buyersapp/profile.html', context)
