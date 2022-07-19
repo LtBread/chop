@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 
 from buyersapp.models import Buyer
@@ -45,3 +45,17 @@ class BuyerRegistrationForm(UserCreationForm):
             print('Регистрация позволена пользователям от 18 лет')
             raise forms.ValidationError('Регистрация позволена пользователям от 18 лет')
         return data
+
+
+class BuyersProfileForm(UserChangeForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4', 'readonly': True}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4', 'readonly': True}))
+
+    class Meta:
+        model = Buyer
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar')

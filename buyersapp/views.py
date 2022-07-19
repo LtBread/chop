@@ -3,7 +3,7 @@ from django.contrib import auth, messages
 from django.urls import reverse
 
 from buyersapp.models import Buyer
-from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm
+from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 
 
 # Create your views here.
@@ -40,7 +40,18 @@ def registration(request):
 
 
 def profile(request):
-    context = {'title': 'Chop - Профиль'}
+    form = BuyersProfileForm()
+
+    # if request.method == 'POST':
+    #     form = BuyersProfileForm(data=request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Данные успешно изменены!')
+    #         return HttpResponseRedirect(reverse('buyers:profile'))
+    # else:
+    #     form = BuyersProfileForm()
+
+    context = {'title': 'Chop - Профиль', 'form': form}
     return render(request, 'buyersapp/profile.html', context)
 
 
