@@ -40,7 +40,7 @@ def registration(request):
 
 
 def profile(request):
-    form = BuyersProfileForm()
+    form = BuyersProfileForm(instance=request.user)
 
     # if request.method == 'POST':
     #     form = BuyersProfileForm(data=request.POST)
@@ -51,7 +51,7 @@ def profile(request):
     # else:
     #     form = BuyersProfileForm()
 
-    context = {'title': 'Chop - Профиль', 'form': form}
+    context = {'title': 'Chop - Личный кабинет', 'form': form}
     return render(request, 'buyersapp/profile.html', context)
 
 
