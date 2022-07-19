@@ -20,7 +20,6 @@ class BuyerLoginForm(AuthenticationForm):
 
 
 class BuyerRegistrationForm(UserCreationForm):
-
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
@@ -29,6 +28,8 @@ class BuyerRegistrationForm(UserCreationForm):
         'class': 'form-control py-4', 'placeholder': 'Введите имя'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите фамилию'}))
+    age = forms.IntegerField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4', 'placeholder': 'Введите возраст'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -36,4 +37,11 @@ class BuyerRegistrationForm(UserCreationForm):
 
     class Meta:
         model = Buyer
-        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'email', 'first_name', 'last_name', 'age', 'password1', 'password2')
+
+    def clean_age(self):
+        data = self.cleaned_data['age']
+        if data < 18:
+            print('Регистрация позволена пользователям от 18 лет')
+            raise forms.ValidationError('Регистрация позволена пользователям от 18 лет')
+        return data
