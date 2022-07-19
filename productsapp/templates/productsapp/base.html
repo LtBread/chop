@@ -41,7 +41,7 @@
 
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="auth/profile.html">
+                        <a class="nav-link" href="{% url 'buyers:profile' %}">
                             {{ user.username }}
                             <i class="fas fa-user-circle"></i>
                         </a>

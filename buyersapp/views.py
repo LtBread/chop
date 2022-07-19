@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.urls import reverse
 
 from buyersapp.models import Buyer
@@ -30,12 +30,18 @@ def registration(request):
         form = BuyerRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('buyers:login'))
     else:
         form = BuyerRegistrationForm()
 
     context = {'title': 'Chop - Регистрация', 'form': form}
     return render(request, 'buyersapp/registration.html', context)
+
+
+def profile(request):
+    context = {'title': 'Chop - Профиль'}
+    return render(request, 'buyersapp/profile.html', context)
 
 
 def logout(request):
