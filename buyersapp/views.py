@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from buyersapp.models import Buyer
 from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
+from basketsapp.models import Basket
 
 
 # Create your views here.
@@ -40,16 +41,21 @@ def registration(request):
 
 
 def profile(request):
+    user = request.user
     if request.method == 'POST':
-        form = BuyersProfileForm(instance=request.user, files=request.FILES, data=request.POST)
+        form = BuyersProfileForm(instance=user, files=request.FILES, data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Данные успешно изменены!')
             return HttpResponseRedirect(reverse('buyers:profile'))
     else:
-        form = BuyersProfileForm(instance=request.user)
+        form = BuyersProfileForm(instance=user)
 
-    context = {'title': 'Chop - Личный кабинет', 'form': form}
+    context = {
+        'title': 'Chop - Личный кабинет',
+        'form': form,
+        'baskets': Basket.objects.filter(buyer=user),
+    }
     return render(request, 'buyersapp/profile.html', context)
 
 
