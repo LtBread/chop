@@ -3,11 +3,12 @@ from django.contrib import auth, messages
 from django.urls import reverse
 
 from buyersapp.models import Buyer
-from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 from basketsapp.models import Basket
-
+from productsapp.models import Product
+from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 
 # Create your views here.
+
 
 def login(request):
     if request.method == 'POST':
@@ -42,6 +43,8 @@ def registration(request):
 
 def profile(request):
     user = request.user
+    baskets = Basket.objects.filter(buyer=user)
+    # product = Product.objects.get(id=baskets.product)
     if request.method == 'POST':
         form = BuyersProfileForm(instance=user, files=request.FILES, data=request.POST)
         if form.is_valid():
@@ -54,7 +57,8 @@ def profile(request):
     context = {
         'title': 'Chop - Личный кабинет',
         'form': form,
-        'baskets': Basket.objects.filter(buyer=user),
+        'baskets': baskets,
+        # 'product': product
     }
     return render(request, 'buyersapp/profile.html', context)
 
