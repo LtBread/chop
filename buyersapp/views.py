@@ -1,11 +1,13 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from buyersapp.models import Buyer
 from basketsapp.models import Basket
 from productsapp.models import Product
 from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
+
 
 # Create your views here.
 
@@ -41,6 +43,7 @@ def registration(request):
     return render(request, 'buyersapp/registration.html', context)
 
 
+@login_required
 def profile(request):
     user = request.user
     baskets = Basket.objects.filter(buyer=user)
