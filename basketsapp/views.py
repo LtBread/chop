@@ -1,5 +1,7 @@
 from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 from productsapp.models import Product
 from basketsapp.models import Basket
@@ -32,3 +34,23 @@ def basket_remove(request, basket_id, product_id):
     product.save()
     basket.delete()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+def is_ajax(request):
+    """ Так как из джанги 4 выпилили request.is_ajax, пришлось прописать это """
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+# Исправить косяк с калькуляцией товара в магазине
+def basket_edit(request, id, quantity):
+    if is_ajax(request):
+        basket = Basket.objects.get(id=id)
+        if quantity > 0:
+            basket.quantity = quantity
+            basket.save()
+        else:
+            basket.delete()
+    baskets = Basket.objects.filter(buyer=request.user)
+    context = {'baskets': baskets}
+    result = render_to_string('basketsapp/baskets.html', context)
+    return JsonResponse({'result': result})
