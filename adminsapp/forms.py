@@ -2,6 +2,7 @@ from django import forms
 
 from buyersapp.forms import BuyerRegistrationForm, BuyersProfileForm
 from buyersapp.models import Buyer
+from productsapp.models import Product
 
 
 class BuyerAdminRegistrationForm(BuyerRegistrationForm):
@@ -17,3 +18,10 @@ class BuyersAdminProfileForm(BuyersProfileForm):
         'class': 'form-control py-4', 'readonly': False}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'class': 'form-control py-4', 'readonly': False}))
+
+
+class ProductAdminCreate(forms.ModelForm):
+    pass
+    # class Meta:
+    #     model = Product
+    #     fields = ('name ',)

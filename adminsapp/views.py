@@ -4,10 +4,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 
 from buyersapp.models import Buyer
+from productsapp.models import Product
 from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm
 
 
 # Create your views here.
+
 
 @user_passes_test(lambda u: u.is_staff)
 def index(request):
@@ -65,3 +67,12 @@ def admin_change_activity(request, buyer_id):
     buyer = Buyer.objects.get(id=buyer_id)
     buyer.change_activity()
     return HttpResponseRedirect(reverse('admins:buyers'))
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_products(request):
+    context = {
+        'title': 'Chop - Товары',
+        'products': Product.objects.all()
+    }
+    return render(request, 'adminsapp/products/admin-products.html', context)
