@@ -29,7 +29,7 @@ def admin_buyers_create(request):
         'title': 'Chop - Создание покупателей',
         'form': form
     }
-    return render(request, 'adminsapp/admin-buyers-create.html', context)
+    return render(request, 'adminsapp/buyers/admin-buyers-create.html', context)
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -38,7 +38,7 @@ def admin_buyers_read(request):
         'title': 'Chop - Покупатели',
         'buyers': Buyer.objects.all()
     }
-    return render(request, 'adminsapp/admin-buyers-read.html', context)
+    return render(request, 'adminsapp/buyers/admin-buyers-read.html', context)
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -57,7 +57,7 @@ def admin_buyers_update(request, buyer_id):
         'form': form,
         'selected_buyer': selected_buyer
     }
-    return render(request, 'adminsapp/admin-buyers-update-delete.html', context)
+    return render(request, 'adminsapp/buyers/admin-buyers-update-delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_staff)
