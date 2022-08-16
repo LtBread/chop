@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
+from buyersapp.models import Buyer
+
 
 # Create your views here.
+
 
 def index(request):
     context = {'title': 'Chop - Админ-панель'}
@@ -14,7 +17,10 @@ def admin_buyers_create(request):
 
 
 def admin_buyers_read(request):
-    context = {'title': 'Chop - Покупатели'}
+    context = {
+        'title': 'Chop - Покупатели',
+        'buyers': Buyer.objects.all()
+    }
     return render(request, 'adminsapp/admin-buyers-read.html', context)
 
 
