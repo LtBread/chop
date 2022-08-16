@@ -1,8 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 
 from buyersapp.models import Buyer
-from adminsapp.forms import BuyerAdminRegistrationForm
+from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm
 
 
 # Create your views here.
@@ -18,7 +19,7 @@ def admin_buyers_create(request):
         form = BuyerAdminRegistrationForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-            # messages.success(request, 'Вы успешно зарегистрировались!')
+            messages.success(request, 'Пользователь создан!')
             return HttpResponseRedirect(reverse('admins:buyers'))
     else:
         form = BuyerAdminRegistrationForm()
@@ -37,10 +38,25 @@ def admin_buyers_read(request):
     return render(request, 'adminsapp/admin-buyers-read.html', context)
 
 
-def admin_buyers_update(request):
-    context = {'title': 'Chop - Редактирование покупателей'}
+def admin_buyers_update(request, buyer_id):
+    selected_buyer = Buyer.objects.get(id=buyer_id)
+    if request.method == 'POST':
+        form = BuyersAdminProfileForm(instance=selected_buyer, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные пользователя успешно изменены!')
+            return HttpResponseRedirect(reverse('admins:buyers'))
+    else:
+        form = BuyersAdminProfileForm(instance=selected_buyer)
+    context = {
+        'title': 'Chop - Редактирование покупателей',
+        'form': form,
+        'selected_buyer': selected_buyer
+    }
     return render(request, 'adminsapp/admin-buyers-update-delete.html', context)
 
 
-def admin_buyers_delete(request):
-    pass
+def admin_change_activity(request, buyer_id):
+    buyer = Buyer.objects.get(id=buyer_id)
+    buyer.change_activity()
+    return HttpResponseRedirect(reverse('admins:buyers'))

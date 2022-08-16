@@ -1,6 +1,6 @@
 from django import forms
 
-from buyersapp.forms import BuyerRegistrationForm
+from buyersapp.forms import BuyerRegistrationForm, BuyersProfileForm
 from buyersapp.models import Buyer
 
 
@@ -10,3 +10,10 @@ class BuyerAdminRegistrationForm(BuyerRegistrationForm):
     class Meta:
         model = Buyer
         fields = ('username', 'email', 'avatar', 'first_name', 'last_name', 'age', 'password1', 'password2')
+
+
+class BuyersAdminProfileForm(BuyersProfileForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4', 'readonly': False}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4', 'readonly': False}))
