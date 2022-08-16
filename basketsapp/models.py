@@ -8,10 +8,10 @@ from productsapp.models import Product
 
 
 class Basket(models.Model):
-    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
-    created_timestamp = models.DateTimeField(auto_now_add=True)
+    buyer = models.ForeignKey(Buyer, verbose_name='покупатель', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='товар', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(verbose_name='количество товара', default=0)
+    created_timestamp = models.DateTimeField(verbose_name='время добавления товара в корзину', auto_now_add=True)
 
     def __str__(self):
         return f' Корзина для {self.buyer.username} | Продукт {self.product.name}'
