@@ -56,17 +56,15 @@
                         <div class="col-lg-6" style="margin-top: 33px;">
                             <input class="btn btn-info btn-block" type="submit" value="Сохранить">
                         </div>
+                        <div class="col-lg-6" style="margin-top: 33px;">
+                            {% if selected_product.is_active %}
+                                <a href="{% url 'admins:product_change_activity' selected_product.id %}" class="btn btn-danger btn-block">Удалить</a>
+                            {% else %}
+                                <a href="{% url 'admins:product_change_activity' selected_product.id %}" class="btn btn-info btn-block">Восстановить</a>
+                            {% endif %}
+                        </div>
                     </div>
                 </form>
-                <div class="form-row">
-                    <div class="col-lg-6" style="margin-top: 33px;">
-                        {% if selected_product.is_active %}
-                            <a href="{% url 'admins:product_change_activity' selected_product.id %}" class="btn btn-danger btn-block">Удалить</a>
-                        {% else %}
-                            <a href="{% url 'admins:product_change_activity' selected_product.id %}" class="btn btn-info btn-block">Восстановить</a>
-                        {% endif %}
-                    </div>
-                </div>
             </div>
         </div>
     </main>

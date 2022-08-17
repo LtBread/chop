@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 
 from buyersapp.models import Buyer
-from productsapp.models import Product
+from productsapp.models import Product, ProductCategory
 from adminsapp.forms import AdminBuyerRegistrationForm, AdminBuyersProfileForm, AdminProductCreateForm, \
-    AdminProductChangeForm
+    AdminProductChangeForm, AdminCategoryCreateForm, AdminCategoryChangeForm
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -117,3 +117,59 @@ def admin_product_change_activity(request, product_id):
     product = Product.objects.get(id=product_id)
     product.change_activity()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_categories(request):
+    context = {
+        'title': 'Chop - Категории товаров',
+        'categories': ProductCategory.objects.all()
+    }
+    return render(request, 'adminsapp/categories/admin-categories.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_category_create(request):
+    if request.method == 'POST':
+        form = AdminCategoryCreateForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Категория товаров создана!')
+            return HttpResponseRedirect(reverse('admins:categories'))
+    else:
+        form = AdminCategoryCreateForm()
+    context = {
+        'title': 'Chop - Создание категорий товаров',
+        'form': form
+    }
+    return render(request, 'adminsapp/categories/admin-category-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_category_update(request, category_id):
+    selected_category = ProductCategory.objects.get(id=category_id)
+    if request.method == 'POST':
+        form = AdminCategoryChangeForm(instance=selected_category, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные категории успешно изменены!')
+            return HttpResponseRedirect(reverse('admins:categories'))
+        else:
+            messages.warning(request, 'Чет хуйня какая-то')
+            return HttpResponseRedirect(reverse('admins:categories'))
+    else:
+        form = AdminCategoryChangeForm(instance=selected_category)
+    context = {
+        'title': 'Chop - Редактирование категорий',
+        'form': form,
+        'selected_category': selected_category
+    }
+    return render(request, 'adminsapp/categories/admin-category-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_category_delete(request, category_id):
+    category = ProductCategory.objects.get(id=category_id)
+    category.delete()
+    return HttpResponseRedirect(reverse('admins:categories'))
+

@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True, verbose_name='описание продукта')),
                 ('quantity', models.PositiveIntegerField(default=0, verbose_name='количество на складе')),
                 ('is_active', models.BooleanField(default=True, verbose_name='активно')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='productsapp.productcategory')),
+                ('categories', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='productsapp.productcategory')),
             ],
         ),
     ]

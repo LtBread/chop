@@ -37,3 +37,16 @@ class AdminProductCreateForm(forms.ModelForm):
 
 class AdminProductChangeForm(AdminProductCreateForm):
     pass
+
+
+class AdminCategoryCreateForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), required=False)
+
+    class Meta:
+        model = ProductCategory
+        fields = ('name', 'description')
+
+
+class AdminCategoryChangeForm(AdminCategoryCreateForm):
+    pass
