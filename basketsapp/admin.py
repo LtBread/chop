@@ -2,8 +2,6 @@ from django.contrib import admin
 
 from basketsapp.models import Basket
 
-# Register your models here.
-
 
 class BasketAdmin(admin.TabularInline):
     model = Basket

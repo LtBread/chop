@@ -6,7 +6,7 @@ from productsapp.models import Product
 from productsapp.models import ProductCategory
 
 
-class BuyerAdminRegistrationForm(BuyerRegistrationForm):
+class AdminBuyerRegistrationForm(BuyerRegistrationForm):
     avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
 
     class Meta:
@@ -14,14 +14,14 @@ class BuyerAdminRegistrationForm(BuyerRegistrationForm):
         fields = ('username', 'email', 'avatar', 'first_name', 'last_name', 'age', 'password1', 'password2')
 
 
-class BuyersAdminProfileForm(BuyersProfileForm):
+class AdminBuyersProfileForm(BuyersProfileForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'readonly': False}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'class': 'form-control py-4', 'readonly': False}))
 
 
-class ProductAdminCreateForm(forms.ModelForm):
+class AdminProductCreateForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
     price = forms.DecimalField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
@@ -35,5 +35,5 @@ class ProductAdminCreateForm(forms.ModelForm):
         fields = ('name', 'description', 'price', 'quantity', 'image', 'category')
 
 
-class ProductAdminChangeForm(ProductAdminCreateForm):
+class AdminProductChangeForm(AdminProductCreateForm):
     pass

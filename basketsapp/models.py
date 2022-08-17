@@ -4,9 +4,6 @@ from buyersapp.models import Buyer
 from productsapp.models import Product
 
 
-# Create your models here.
-
-
 class Basket(models.Model):
     buyer = models.ForeignKey(Buyer, verbose_name='покупатель', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='товар', on_delete=models.CASCADE)

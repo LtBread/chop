@@ -9,9 +9,6 @@ from productsapp.models import Product
 from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 
 
-# Create your views here.
-
-
 def login(request):
     if request.method == 'POST':
         form = BuyerLoginForm(data=request.POST)

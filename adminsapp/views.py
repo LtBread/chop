@@ -5,11 +5,8 @@ from django.contrib.auth.decorators import user_passes_test
 
 from buyersapp.models import Buyer
 from productsapp.models import Product
-from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm, ProductAdminCreateForm, \
-    ProductAdminChangeForm
-
-
-# Create your views here.
+from adminsapp.forms import AdminBuyerRegistrationForm, AdminBuyersProfileForm, AdminProductCreateForm, \
+    AdminProductChangeForm
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -18,52 +15,52 @@ def index(request):
     return render(request, 'adminsapp/index.html', context)
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_buyers_create(request):
+@user_passes_test(lambda u: u.is_superuser)
+def admin_buyers(request):
+    context = {
+        'title': 'Chop - Покупатели',
+        'buyers': Buyer.objects.all()
+    }
+    return render(request, 'adminsapp/buyers/admin-buyers.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_buyer_create(request):
     if request.method == 'POST':
-        form = BuyerAdminRegistrationForm(data=request.POST, files=request.FILES)
+        form = AdminBuyerRegistrationForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Пользователь создан!')
             return HttpResponseRedirect(reverse('admins:buyers'))
     else:
-        form = BuyerAdminRegistrationForm()
+        form = AdminBuyerRegistrationForm()
     context = {
         'title': 'Chop - Создание покупателей',
         'form': form
     }
-    return render(request, 'adminsapp/buyers/admin-buyers-create.html', context)
+    return render(request, 'adminsapp/buyers/admin-buyer-create.html', context)
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_buyers_read(request):
-    context = {
-        'title': 'Chop - Покупатели',
-        'buyers': Buyer.objects.all()
-    }
-    return render(request, 'adminsapp/buyers/admin-buyers-read.html', context)
-
-
-@user_passes_test(lambda u: u.is_staff)
-def admin_buyers_update(request, buyer_id):
+@user_passes_test(lambda u: u.is_superuser)
+def admin_buyer_update(request, buyer_id):
     selected_buyer = Buyer.objects.get(id=buyer_id)
     if request.method == 'POST':
-        form = BuyersAdminProfileForm(instance=selected_buyer, data=request.POST, files=request.FILES)
+        form = AdminBuyersProfileForm(instance=selected_buyer, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Данные пользователя успешно изменены!')
             return HttpResponseRedirect(reverse('admins:buyers'))
     else:
-        form = BuyersAdminProfileForm(instance=selected_buyer)
+        form = AdminBuyersProfileForm(instance=selected_buyer)
     context = {
         'title': 'Chop - Редактирование покупателей',
         'form': form,
         'selected_buyer': selected_buyer
     }
-    return render(request, 'adminsapp/buyers/admin-buyers-update-delete.html', context)
+    return render(request, 'adminsapp/buyers/admin-buyer-update-delete.html', context)
 
 
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(lambda u: u.is_superuser)
 def admin_buyer_change_activity(request, buyer_id):
     buyer = Buyer.objects.get(id=buyer_id)
     buyer.change_activity()
@@ -82,13 +79,13 @@ def admin_products(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_product_create(request):
     if request.method == 'POST':
-        form = ProductAdminCreateForm(data=request.POST, files=request.FILES)
+        form = AdminProductCreateForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Товар создан!')
             return HttpResponseRedirect(reverse('admins:products'))
     else:
-        form = ProductAdminCreateForm()
+        form = AdminProductCreateForm()
     context = {
         'title': 'Chop - Создание товаров',
         'form': form
@@ -100,13 +97,13 @@ def admin_product_create(request):
 def admin_product_update(request, product_id):
     selected_product = Product.objects.get(id=product_id)
     if request.method == 'POST':
-        form = ProductAdminChangeForm(instance=selected_product, data=request.POST, files=request.FILES)
+        form = AdminProductChangeForm(instance=selected_product, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Данные товара успешно изменены!')
             return HttpResponseRedirect(reverse('admins:products'))
     else:
-        form = ProductAdminChangeForm(instance=selected_product)
+        form = AdminProductChangeForm(instance=selected_product)
     context = {
         'title': 'Chop - Редактирование товаров',
         'form': form,

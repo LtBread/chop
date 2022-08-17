@@ -7,8 +7,6 @@ from productsapp.models import Product
 from basketsapp.models import Basket
 
 
-# Create your views here.
-
 @login_required
 def basket_add(request, product_id):
     product = Product.objects.get(id=product_id)

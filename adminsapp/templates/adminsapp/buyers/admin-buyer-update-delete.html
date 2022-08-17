@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <h1 class="mt-4">Редактирование пользователя | {{ selected_buyer.username }}</h1>
             <div class="card-body">
-                <form action="{% url 'admins:buyers_update' selected_buyer.id %}" method="post" enctype="multipart/form-data">
+                <form action="{% url 'admins:buyer_update' selected_buyer.id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">
@@ -54,14 +54,14 @@
                     </div>
                 </form>
                 <div class="form-row">
-                        <div class="col-lg-6" style="margin-top: 33px;">
-                            {% if selected_buyer.is_active %}
-                                <a href="{% url 'admins:buyer_change_activity' selected_buyer.id %}" class="btn btn-danger btn-block">Удалить</a>
-                            {% else %}
-                                <a href="{% url 'admins:buyer_change_activity' selected_buyer.id %}" class="btn btn-info btn-block">Восстановить</a>
-                            {% endif %}
-                        </div>
+                    <div class="col-lg-6" style="margin-top: 33px;">
+                        {% if selected_buyer.is_active %}
+                            <a href="{% url 'admins:buyer_change_activity' selected_buyer.id %}" class="btn btn-danger btn-block">Удалить</a>
+                        {% else %}
+                            <a href="{% url 'admins:buyer_change_activity' selected_buyer.id %}" class="btn btn-info btn-block">Восстановить</a>
+                        {% endif %}
                     </div>
+                </div>
             </div>
         </div>
     </main>
