@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import user_passes_test
 
 from buyersapp.models import Buyer
 from productsapp.models import Product
-from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm, ProductAdminCreateForm
+from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm, ProductAdminCreateForm, \
+    ProductAdminChangeForm
 
 
 # Create your views here.
@@ -63,10 +64,10 @@ def admin_buyers_update(request, buyer_id):
 
 
 @user_passes_test(lambda u: u.is_staff)
-def admin_change_activity(request, buyer_id):
+def admin_buyer_change_activity(request, buyer_id):
     buyer = Buyer.objects.get(id=buyer_id)
     buyer.change_activity()
-    return HttpResponseRedirect(reverse('admins:buyers'))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -93,3 +94,29 @@ def admin_product_create(request):
         'form': form
     }
     return render(request, 'adminsapp/products/admin-product-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_product_update(request, product_id):
+    selected_product = Product.objects.get(id=product_id)
+    if request.method == 'POST':
+        form = ProductAdminChangeForm(instance=selected_product, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные товара успешно изменены!')
+            return HttpResponseRedirect(reverse('admins:products'))
+    else:
+        form = ProductAdminChangeForm(instance=selected_product)
+    context = {
+        'title': 'Chop - Редактирование товаров',
+        'form': form,
+        'selected_product': selected_product
+    }
+    return render(request, 'adminsapp/products/admin-product-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_product_change_activity(request, product_id):
+    product = Product.objects.get(id=product_id)
+    product.change_activity()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
