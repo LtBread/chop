@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from buyersapp.models import Buyer
 from productsapp.models import Product
-from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm
+from adminsapp.forms import BuyerAdminRegistrationForm, BuyersAdminProfileForm, ProductAdminCreateForm
 
 
 # Create your views here.
@@ -76,3 +76,20 @@ def admin_products(request):
         'products': Product.objects.all()
     }
     return render(request, 'adminsapp/products/admin-products.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_product_create(request):
+    if request.method == 'POST':
+        form = ProductAdminCreateForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Товар создан!')
+            return HttpResponseRedirect(reverse('admins:products'))
+    else:
+        form = ProductAdminCreateForm()
+    context = {
+        'title': 'Chop - Создание товаров',
+        'form': form
+    }
+    return render(request, 'adminsapp/products/admin-product-create.html', context)
