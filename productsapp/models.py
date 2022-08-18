@@ -8,6 +8,11 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def products_count(self):
+        products = Product.objects.filter(category=self.id).count
+        return products
+
 
 class Product(models.Model):
     category = models.ForeignKey(ProductCategory, verbose_name='категории', on_delete=models.PROTECT)

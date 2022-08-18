@@ -122,9 +122,10 @@ def admin_product_change_activity(request, product_id):
 
 @user_passes_test(lambda u: u.is_staff)
 def admin_categories(request):
+    categories = ProductCategory.objects.all()
     context = {
         'title': 'Chop - Категории товаров',
-        'categories': ProductCategory.objects.all()
+        'categories': categories
     }
     return render(request, 'adminsapp/categories/admin-categories.html', context)
 
@@ -173,5 +174,5 @@ def admin_category_delete(request, category_id):
         messages.success(request, 'Категория успешно удалена!')
     except ProtectedError:
         messages.warning(request, 'Ошибка удаления категории: существуют товары данной категории! '
-                                'Для удаления категории переведите товары в другую категорию.')
+                                  'Для удаления категории переведите товары в другую категорию.')
     return HttpResponseRedirect(reverse('admins:categories'))
