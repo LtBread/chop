@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models.deletion import ProtectedError
 
 from buyersapp.models import Buyer
 from productsapp.models import Product, ProductCategory
@@ -154,9 +155,6 @@ def admin_category_update(request, category_id):
             form.save()
             messages.success(request, 'Данные категории успешно изменены!')
             return HttpResponseRedirect(reverse('admins:categories'))
-        else:
-            messages.warning(request, 'Чет хуйня какая-то')
-            return HttpResponseRedirect(reverse('admins:categories'))
     else:
         form = AdminCategoryChangeForm(instance=selected_category)
     context = {
@@ -169,7 +167,11 @@ def admin_category_update(request, category_id):
 
 @user_passes_test(lambda u: u.is_staff)
 def admin_category_delete(request, category_id):
-    category = ProductCategory.objects.get(id=category_id)
-    category.delete()
+    try:
+        category = ProductCategory.objects.get(id=category_id)
+        category.delete()
+        messages.success(request, 'Категория успешно удалена!')
+    except ProtectedError:
+        messages.warning(request, 'Ошибка удаления категории: существуют товары данной категории! '
+                                'Для удаления категории переведите товары в другую категорию.')
     return HttpResponseRedirect(reverse('admins:categories'))
-
