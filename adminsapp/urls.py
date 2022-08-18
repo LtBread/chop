@@ -4,7 +4,7 @@ from adminsapp.views import index, admin_buyer_create, admin_buyers, admin_buyer
     admin_buyer_change_activity, admin_products, admin_product_create, admin_product_update, \
     admin_product_change_activity, admin_categories, admin_category_create, admin_category_update, admin_category_delete
 
-app_name = 'admins'
+app_name = 'adminsapp'
 
 urlpatterns = [
     path('', index, name='index'),
