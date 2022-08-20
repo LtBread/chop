@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 from buyersapp.models import Buyer
 from productsapp.models import Product, ProductCategory
@@ -17,7 +18,7 @@ def index(request):
     return render(request, 'adminsapp/index.html', context)
 
 
-class BuyerListView(ListView):
+class AdminBuyerListView(ListView):
     model = Buyer
     template_name = 'adminsapp/buyers/admin-buyers.html'
 
@@ -31,21 +32,28 @@ class BuyerListView(ListView):
 #     return render(request, 'adminsapp/buyers/admin-buyers.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_buyer_create(request):
-    if request.method == 'POST':
-        form = AdminBuyerRegistrationForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Пользователь создан!')
-            return HttpResponseRedirect(reverse('admins:buyers'))
-    else:
-        form = AdminBuyerRegistrationForm()
-    context = {
-        'title': 'Chop - Создание покупателей',
-        'form': form
-    }
-    return render(request, 'adminsapp/buyers/admin-buyer-create.html', context)
+class AdminBuyerCreateView(CreateView):
+    model = Buyer
+    template_name = 'adminsapp/buyers/admin-buyer-create.html'
+    form_class = AdminBuyerRegistrationForm
+    success_url = reverse_lazy('admins:buyers')
+
+
+# @user_passes_test(lambda u: u.is_superuser)
+# def admin_buyer_create(request):
+#     if request.method == 'POST':
+#         form = AdminBuyerRegistrationForm(data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Пользователь создан!')
+#             return HttpResponseRedirect(reverse('admins:buyers'))
+#     else:
+#         form = AdminBuyerRegistrationForm()
+#     context = {
+#         'title': 'Chop - Создание покупателей',
+#         'form': form
+#     }
+#     return render(request, 'adminsapp/buyers/admin-buyer-create.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
