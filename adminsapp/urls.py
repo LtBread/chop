@@ -1,7 +1,7 @@
 from django.urls import path
 
-from adminsapp.views import index, AdminBuyerListView, AdminBuyerCreateView, admin_buyer_update, \
-    admin_buyer_change_activity, admin_products, admin_product_create, admin_product_update, \
+from adminsapp.views import index, AdminBuyerListView, AdminBuyerCreateView, AdminBuyerUpdateView, \
+    AdminBuyerChangeActivityView, admin_products, admin_product_create, admin_product_update, \
     admin_product_change_activity, admin_categories, admin_category_create, admin_category_update, admin_category_delete
 
 app_name = 'adminsapp'
@@ -11,8 +11,8 @@ urlpatterns = [
 
     path('buyers/', AdminBuyerListView.as_view(), name='buyers'),
     path('buyer-create/', AdminBuyerCreateView.as_view(), name='buyer_create'),
-    path('buyer-update/<int:buyer_id>/', admin_buyer_update, name='buyer_update'),
-    path('buyer-change-activity/<int:buyer_id>/', admin_buyer_change_activity, name='buyer_change_activity'),
+    path('buyer-update/<int:pk>/', AdminBuyerUpdateView.as_view(), name='buyer_update'),
+    path('buyer-change-activity/<int:pk>/', AdminBuyerChangeActivityView.as_view(), name='buyer_change_activity'),
 
     path('products/', admin_products, name='products'),
     path('product-create/', admin_product_create, name='product_create'),

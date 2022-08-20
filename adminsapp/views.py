@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from buyersapp.models import Buyer
 from productsapp.models import Product, ProductCategory
@@ -34,9 +34,9 @@ class AdminBuyerListView(ListView):
 
 class AdminBuyerCreateView(CreateView):
     model = Buyer
-    template_name = 'adminsapp/buyers/admin-buyer-create.html'
     form_class = AdminBuyerRegistrationForm
     success_url = reverse_lazy('admins:buyers')
+    template_name = 'adminsapp/buyers/admin-buyer-create.html'
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -56,30 +56,54 @@ class AdminBuyerCreateView(CreateView):
 #     return render(request, 'adminsapp/buyers/admin-buyer-create.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_buyer_update(request, buyer_id):
-    selected_buyer = Buyer.objects.get(id=buyer_id)
-    if request.method == 'POST':
-        form = AdminBuyersProfileForm(instance=selected_buyer, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Данные пользователя успешно изменены!')
-            return HttpResponseRedirect(reverse('admins:buyers'))
-    else:
-        form = AdminBuyersProfileForm(instance=selected_buyer)
-    context = {
-        'title': 'Chop - Редактирование покупателей',
-        'form': form,
-        'selected_buyer': selected_buyer
-    }
-    return render(request, 'adminsapp/buyers/admin-buyer-update-delete.html', context)
+class AdminBuyerUpdateView(UpdateView):
+    model = Buyer
+    form_class = AdminBuyersProfileForm
+    success_url = reverse_lazy('admins:buyers')
+    template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_buyer_change_activity(request, buyer_id):
-    buyer = Buyer.objects.get(id=buyer_id)
-    buyer.change_activity()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+# @user_passes_test(lambda u: u.is_superuser)
+# def admin_buyer_update(request, buyer_id):
+#     selected_buyer = Buyer.objects.get(id=buyer_id)
+#     if request.method == 'POST':
+#         form = AdminBuyersProfileForm(instance=selected_buyer, data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Данные пользователя успешно изменены!')
+#             return HttpResponseRedirect(reverse('admins:buyers'))
+#     else:
+#         form = AdminBuyersProfileForm(instance=selected_buyer)
+#     context = {
+#         'title': 'Chop - Редактирование покупателей',
+#         'form': form,
+#         'selected_buyer': selected_buyer
+#     }
+#     return render(request, 'adminsapp/buyers/admin-buyer-update-delete.html', context)
+
+
+class AdminBuyerChangeActivityView(DeleteView):
+    model = Buyer
+    success_url = reverse_lazy('admins:buyers')
+    template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
+
+    # def delete(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     success_url = self.get_success_url()
+    #     self.object.change_activity()
+    #     return HttpResponseRedirect(success_url)
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.change_activity()
+        return HttpResponseRedirect(success_url)
+
+
+# @user_passes_test(lambda u: u.is_superuser)
+# def admin_buyer_change_activity(request, buyer_id):
+#     buyer = Buyer.objects.get(id=buyer_id)
+#     buyer.change_activity()
+#     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @user_passes_test(lambda u: u.is_staff)
