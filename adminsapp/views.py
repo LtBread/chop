@@ -22,6 +22,10 @@ class AdminBuyerListView(ListView):
     model = Buyer
     template_name = 'adminsapp/buyers/admin-buyers.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(AdminBuyerListView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Покупатели'
+
 
 # @user_passes_test(lambda u: u.is_superuser)
 # def admin_buyers(request):
@@ -37,6 +41,10 @@ class AdminBuyerCreateView(CreateView):
     form_class = AdminBuyerRegistrationForm
     success_url = reverse_lazy('admins:buyers')
     template_name = 'adminsapp/buyers/admin-buyer-create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminBuyerCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Создание покупателей'
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -61,6 +69,11 @@ class AdminBuyerUpdateView(UpdateView):
     form_class = AdminBuyersProfileForm
     success_url = reverse_lazy('admins:buyers')
     template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminBuyerUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Редактирование покупателей'
+        return context
 
 
 # @user_passes_test(lambda u: u.is_superuser)

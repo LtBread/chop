@@ -2,7 +2,7 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Редактирование пользователя | {{ buyer.username }}</h1>
+            <h1 class="mt-4">Редактирование покупателя | {{ buyer.username }}</h1>
             <div class="card-body">
                 <form action="{% url 'admins:buyer_update' buyer.id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
