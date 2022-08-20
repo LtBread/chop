@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
 
 from buyersapp.models import Buyer
 from productsapp.models import Product, ProductCategory
@@ -22,9 +23,14 @@ class AdminBuyerListView(ListView):
     model = Buyer
     template_name = 'adminsapp/buyers/admin-buyers.html'
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminBuyerListView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(AdminBuyerListView, self).get_context_data(**kwargs)
         context['title'] = 'Chop - Покупатели'
+        return context
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -42,9 +48,14 @@ class AdminBuyerCreateView(CreateView):
     success_url = reverse_lazy('admins:buyers')
     template_name = 'adminsapp/buyers/admin-buyer-create.html'
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminBuyerCreateView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(AdminBuyerCreateView, self).get_context_data(**kwargs)
         context['title'] = 'Chop - Создание покупателей'
+        return context
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -69,6 +80,10 @@ class AdminBuyerUpdateView(UpdateView):
     form_class = AdminBuyersProfileForm
     success_url = reverse_lazy('admins:buyers')
     template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminBuyerUpdateView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(AdminBuyerUpdateView, self).get_context_data(**kwargs)
@@ -99,6 +114,10 @@ class AdminBuyerChangeActivityView(DeleteView):
     model = Buyer
     success_url = reverse_lazy('admins:buyers')
     template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminBuyerChangeActivityView, self).dispatch(request, *args, **kwargs)
 
     # def delete(self, request, *args, **kwargs):
     #     self.object = self.get_object()
