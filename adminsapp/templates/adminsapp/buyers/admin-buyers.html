@@ -49,7 +49,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                {% for buyer in buyers %}
+                                {% for buyer in object_list %}
                                     <tr>
                                         <td><a href="{% url 'admins:buyer_update' buyer.id %}" style="color: dodgerblue">{{ buyer.username }}</a></td>
                                         <td>{{ buyer.first_name }}</td>

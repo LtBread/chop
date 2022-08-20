@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
+from django.views.generic.list import ListView
 
 from buyersapp.models import Buyer
 from productsapp.models import Product, ProductCategory
@@ -16,13 +17,18 @@ def index(request):
     return render(request, 'adminsapp/index.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_buyers(request):
-    context = {
-        'title': 'Chop - Покупатели',
-        'buyers': Buyer.objects.all()
-    }
-    return render(request, 'adminsapp/buyers/admin-buyers.html', context)
+class BuyerListView(ListView):
+    model = Buyer
+    template_name = 'adminsapp/buyers/admin-buyers.html'
+
+
+# @user_passes_test(lambda u: u.is_superuser)
+# def admin_buyers(request):
+#     context = {
+#         'title': 'Chop - Покупатели',
+#         'buyers': Buyer.objects.all()
+#     }
+#     return render(request, 'adminsapp/buyers/admin-buyers.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
