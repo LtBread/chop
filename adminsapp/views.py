@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
@@ -200,6 +200,9 @@ class AdminCategoryDeleteView(DeleteView):
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryDeleteView, self).dispatch(request, *args, **kwargs)
+
+
+# from django.urls import reverse
 
 
 """ Buyer LIST """
