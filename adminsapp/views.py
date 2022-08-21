@@ -78,6 +78,7 @@ class AdminBuyerChangeActivityView(DeleteView):
         return super(AdminBuyerChangeActivityView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        """ overwritten delete method """
         success_url = self.get_success_url()
         self.object.change_activity()
         return HttpResponseRedirect(success_url)
