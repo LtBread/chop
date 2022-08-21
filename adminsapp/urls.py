@@ -2,7 +2,7 @@ from django.urls import path
 
 from adminsapp.views import index, AdminBuyerListView, AdminBuyerCreateView, AdminBuyerUpdateView, \
     AdminBuyerChangeActivityView, AdminProductListView, AdminProductCreateView, AdminProductUpdateView, \
-    AdminProductDeleteView, admin_categories, admin_category_create, admin_category_update, admin_category_delete
+    AdminProductDeleteView, AdminCategoryListView, AdminCategoryCreateView, AdminCategoryUpdateView, AdminCategoryDeleteView
 
 app_name = 'adminsapp'
 
@@ -19,8 +19,8 @@ urlpatterns = [
     path('product-update/<int:pk>/', AdminProductUpdateView.as_view(), name='product_update'),
     path('product-delete/<int:pk>/', AdminProductDeleteView.as_view(), name='product_delete'),
 
-    path('categories/', admin_categories, name='categories'),
-    path('category-create/', admin_category_create, name='category_create'),
-    path('category-update/<int:category_id>/', admin_category_update, name='category_update'),
-    path('category-delete/<int:category_id>/', admin_category_delete, name='category_delete'),
+    path('categories/', AdminCategoryListView.as_view(), name='categories'),
+    path('category-create/', AdminCategoryCreateView.as_view(), name='category_create'),
+    path('category-update/<int:pk>/', AdminCategoryUpdateView.as_view(), name='category_update'),
+    path('category-delete/<int:pk>/', AdminCategoryDeleteView.as_view(), name='category_delete'),
 ]
