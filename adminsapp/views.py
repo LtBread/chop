@@ -138,56 +138,112 @@ class AdminBuyerChangeActivityView(DeleteView):
 #     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_products(request):
-    context = {
-        'title': 'Chop - Товары',
-        'products': Product.objects.all()
-    }
-    return render(request, 'adminsapp/products/admin-products.html', context)
+class AdminProductListView(ListView):
+    model = Product
+    template_name = 'adminsapp/products/admin-products.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminProductListView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminProductListView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Товары'
+        return context
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_product_create(request):
-    if request.method == 'POST':
-        form = AdminProductCreateForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Товар создан!')
-            return HttpResponseRedirect(reverse('admins:products'))
-    else:
-        form = AdminProductCreateForm()
-    context = {
-        'title': 'Chop - Создание товаров',
-        'form': form
-    }
-    return render(request, 'adminsapp/products/admin-product-create.html', context)
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_products(request):
+#     context = {
+#         'title': 'Chop - Товары',
+#         'products': Product.objects.all()
+#     }
+#     return render(request, 'adminsapp/products/admin-products.html', context)
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_product_update(request, product_id):
-    selected_product = Product.objects.get(id=product_id)
-    if request.method == 'POST':
-        form = AdminProductChangeForm(instance=selected_product, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Данные товара успешно изменены!')
-            return HttpResponseRedirect(reverse('admins:products'))
-    else:
-        form = AdminProductChangeForm(instance=selected_product)
-    context = {
-        'title': 'Chop - Редактирование товаров',
-        'form': form,
-        'selected_product': selected_product
-    }
-    return render(request, 'adminsapp/products/admin-product-update-delete.html', context)
+class AdminProductCreateView(CreateView):
+    model = Product
+    form_class = AdminProductCreateForm
+    success_url = reverse_lazy('admins:products')
+    template_name = 'adminsapp/products/admin-product-create.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminProductCreateView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminProductCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Создание товаров'
+        return context
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_product_change_activity(request, product_id):
-    product = Product.objects.get(id=product_id)
-    product.change_activity()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_product_create(request):
+#     if request.method == 'POST':
+#         form = AdminProductCreateForm(data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Товар создан!')
+#             return HttpResponseRedirect(reverse('admins:products'))
+#     else:
+#         form = AdminProductCreateForm()
+#     context = {
+#         'title': 'Chop - Создание товаров',
+#         'form': form
+#     }
+#     return render(request, 'adminsapp/products/admin-product-create.html', context)
+
+
+class AdminProductUpdateView(UpdateView):
+    model = Product
+    form_class = AdminProductChangeForm
+    success_url = reverse_lazy('admins:products')
+    template_name = 'adminsapp/products/admin-product-update-delete.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminProductUpdateView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminProductUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Редактирование товаров'
+        return context
+
+
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_product_update(request, product_id):
+#     selected_product = Product.objects.get(id=product_id)
+#     if request.method == 'POST':
+#         form = AdminProductChangeForm(instance=selected_product, data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Данные товара успешно изменены!')
+#             return HttpResponseRedirect(reverse('admins:products'))
+#     else:
+#         form = AdminProductChangeForm(instance=selected_product)
+#     context = {
+#         'title': 'Chop - Редактирование товаров',
+#         'form': form,
+#         'selected_product': selected_product
+#     }
+#     return render(request, 'adminsapp/products/admin-product-update-delete.html', context)
+
+
+class AdminProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('admins:products')
+    template_name = 'adminsapp/products/admin-product-update-delete.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminProductDeleteView, self).dispatch(request, *args, **kwargs)
+
+
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_product_change_activity(request, product_id):
+#     product = Product.objects.get(id=product_id)
+#     product.change_activity()
+#     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @user_passes_test(lambda u: u.is_staff)

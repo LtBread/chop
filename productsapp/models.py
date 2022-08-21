@@ -25,7 +25,3 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name} | {self.category}'
-
-    def change_activity(self):
-        self.is_active = not self.is_active
-        self.save()
