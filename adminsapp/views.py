@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.deletion import ProtectedError
+from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
@@ -13,10 +14,19 @@ from adminsapp.forms import AdminBuyerRegistrationForm, AdminBuyersProfileForm, 
     AdminProductChangeForm, AdminCategoryCreateForm, AdminCategoryChangeForm
 
 
-@user_passes_test(lambda u: u.is_staff)
-def index(request):
-    context = {'title': 'Chop - Админ-панель'}
-    return render(request, 'adminsapp/index.html', context)
+class AdminPanelView(TemplateView):
+    """ A view for displaying a admin panel """
+    extra_context = {'title': 'Chop - Админ-панель'}  # replaces get_context_data
+    template_name = 'adminsapp/index.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminPanelView, self).dispatch(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(AdminPanelView, self).get_context_data(**kwargs)
+    #     context['title'] = 'Chop - Админ-панель'
+    #     return context
 
 
 """ BUYERS """
@@ -24,16 +34,12 @@ def index(request):
 
 class AdminBuyerListView(ListView):
     model = Buyer
+    extra_context = {'title': 'Chop - Покупатели'}
     template_name = 'adminsapp/buyers/admin-buyers.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminBuyerListView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AdminBuyerListView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Покупатели'
-        return context
 
 
 class AdminBuyerCreateView(CreateView):
@@ -56,16 +62,12 @@ class AdminBuyerUpdateView(UpdateView):
     model = Buyer
     form_class = AdminBuyersProfileForm
     success_url = reverse_lazy('admins:buyers')
+    extra_context = {'title': 'Chop - Редактирование покупателей'}
     template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminBuyerUpdateView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AdminBuyerUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Редактирование покупателей'
-        return context
 
 
 class AdminBuyerChangeActivityView(DeleteView):
@@ -89,48 +91,36 @@ class AdminBuyerChangeActivityView(DeleteView):
 
 class AdminProductListView(ListView):
     model = Product
+    extra_context = {'title': 'Chop - Товары'}
     template_name = 'adminsapp/products/admin-products.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductListView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(AdminProductListView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Товары'
-        return context
-
 
 class AdminProductCreateView(CreateView):
     model = Product
     form_class = AdminProductCreateForm
     success_url = reverse_lazy('admins:products')
+    extra_context = {'title': 'Chop - Создание товаров'}
     template_name = 'adminsapp/products/admin-product-create.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductCreateView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(AdminProductCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Создание товаров'
-        return context
-
 
 class AdminProductUpdateView(UpdateView):
     model = Product
     form_class = AdminProductChangeForm
     success_url = reverse_lazy('admins:products')
+    extra_context = {'title': 'Chop - Редактирование товаров'}
     template_name = 'adminsapp/products/admin-product-update-delete.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductUpdateView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AdminProductUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Редактирование товаров'
-        return context
 
 
 class AdminProductDeleteView(DeleteView):
@@ -148,48 +138,36 @@ class AdminProductDeleteView(DeleteView):
 
 class AdminCategoryListView(ListView):
     model = ProductCategory
+    extra_context = {'title': 'Chop - Категории товаров'}
     template_name = 'adminsapp/categories/admin-categories.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryListView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(AdminCategoryListView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Категории товаров'
-        return context
-
 
 class AdminCategoryCreateView(CreateView):
     model = ProductCategory
     form_class = AdminCategoryCreateForm
     success_url = reverse_lazy('admins:categories')
+    extra_context = {'title': 'Chop - создание категорий товаров'}
     template_name = 'adminsapp/categories/admin-category-create.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryCreateView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(AdminCategoryCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - создание категорий товаров'
-        return context
-
 
 class AdminCategoryUpdateView(UpdateView):
     model = ProductCategory
     form_class = AdminCategoryChangeForm
     success_url = reverse_lazy('admins:categories')
+    extra_context = {'title': 'Chop - редактирование статьи'}
     template_name = 'adminsapp/categories/admin-category-update-delete.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryUpdateView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AdminCategoryUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - редактирование статьи'
-        return context
 
 
 class AdminCategoryDeleteView(DeleteView):
@@ -203,6 +181,12 @@ class AdminCategoryDeleteView(DeleteView):
 
 
 # from django.urls import reverse
+
+
+# @user_passes_test(lambda u: u.is_staff)
+# def index(request):
+#     context = {'title': 'Chop - Админ-панель'}
+#     return render(request, 'adminsapp/index.html', context)
 
 
 """ Buyer LIST """
@@ -259,4 +243,3 @@ class AdminCategoryDeleteView(DeleteView):
 #     buyer = Buyer.objects.get(id=buyer_id)
 #     buyer.change_activity()
 #     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-

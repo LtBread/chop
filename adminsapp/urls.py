@@ -1,13 +1,13 @@
 from django.urls import path
 
-from adminsapp.views import index, AdminBuyerListView, AdminBuyerCreateView, AdminBuyerUpdateView, \
+from adminsapp.views import AdminPanelView, AdminBuyerListView, AdminBuyerCreateView, AdminBuyerUpdateView, \
     AdminBuyerChangeActivityView, AdminProductListView, AdminProductCreateView, AdminProductUpdateView, \
     AdminProductDeleteView, AdminCategoryListView, AdminCategoryCreateView, AdminCategoryUpdateView, AdminCategoryDeleteView
 
 app_name = 'adminsapp'
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('', AdminPanelView.as_view(), name='index'),
 
     path('buyers/', AdminBuyerListView.as_view(), name='buyers'),
     path('buyer-create/', AdminBuyerCreateView.as_view(), name='buyer_create'),
