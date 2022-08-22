@@ -6,11 +6,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include
 
-from productsapp.views import index
+from productsapp.views import MainPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    path('', MainPageView.as_view(), name='index'),
     path('products/', include('productsapp.urls', namespace='products')),
     path('buyers/', include('buyersapp.urls', namespace='buyers')),
     path('baskets/', include('basketsapp.urls', namespace='baskets')),

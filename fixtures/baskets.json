@@ -1,0 +1,32 @@
+[
+  {
+    "model": "basketsapp.basket",
+    "pk": 20,
+    "fields": {
+      "buyer": 10,
+      "product": 2,
+      "quantity": 1,
+      "created_timestamp": "2022-08-06T16:18:56.354Z"
+    }
+  },
+  {
+    "model": "basketsapp.basket",
+    "pk": 21,
+    "fields": {
+      "buyer": 10,
+      "product": 1,
+      "quantity": 1,
+      "created_timestamp": "2022-08-06T16:32:54.080Z"
+    }
+  },
+  {
+    "model": "basketsapp.basket",
+    "pk": 30,
+    "fields": {
+      "buyer": 14,
+      "product": 3,
+      "quantity": 2,
+      "created_timestamp": "2022-08-16T10:22:43.125Z"
+    }
+  }
+]

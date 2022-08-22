@@ -1,0 +1,62 @@
+[
+  {
+    "model": "buyersapp.buyer",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$q4vukRxWQVO5LPTeTPGFbX$TZH2Xz3TpMoHfkDqBUWFyEfw3VVcLlijB9y+PcHLuys=",
+      "last_login": "2022-08-16T08:10:00.465Z",
+      "is_superuser": false,
+      "username": "snake",
+      "first_name": "Семен",
+      "last_name": "Семенов",
+      "email": "snake1234@mail.ru",
+      "is_staff": false,
+      "is_active": false,
+      "date_joined": "2022-07-19T12:22:10.746Z",
+      "avatar": "buyers_avatars/0_868c5_3682c3f5_L.jpg",
+      "age": 21,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "buyersapp.buyer",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$Y8iK3hN20rKW3qkUaYyq7q$RlB2iW/hCJ4CH0eok7Mb2ENCXLG6XUxXHH00bnJ4ruQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "petery",
+      "first_name": "Пётр",
+      "last_name": "Антонов",
+      "email": "petery@mail.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-16T08:39:06.831Z",
+      "avatar": "buyers_avatars/uolles-i-gromit-velikiy-vyhodnoy_1.jpg",
+      "age": 21,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "buyersapp.buyer",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$w1UvsYz22GJcjQr0DswYZo$jWx9z0Tn79NKPvNKA0lyniPujG/a06KhBhfDQHCOZ9w=",
+      "last_login": "2022-08-22T04:14:17.966Z",
+      "is_superuser": false,
+      "username": "weather",
+      "first_name": "Семён",
+      "last_name": "Петров",
+      "email": "weather777@mail.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-08-16T09:21:28Z",
+      "avatar": "",
+      "age": 35,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

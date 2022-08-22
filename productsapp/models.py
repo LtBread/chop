@@ -1,12 +1,17 @@
 from django.db import models
+from django.urls import reverse
 
 
 class ProductCategory(models.Model):
     name = models.CharField(verbose_name='имя категории', max_length=64, unique=True)
     description = models.TextField(verbose_name='описание категории', blank=True)
+    slug = models.SlugField(max_length=60, unique=True, db_index=True)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category_name', kwargs={'slug': self.slug})
 
     @property
     def products_count(self):
