@@ -46,16 +46,17 @@ class AdminBuyerCreateView(CreateView):
     model = Buyer
     form_class = AdminBuyerRegistrationForm
     success_url = reverse_lazy('admins:buyers')
+    extra_context = {'title': 'Chop - Создание покупателей'}
     template_name = 'adminsapp/buyers/admin-buyer-create.html'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminBuyerCreateView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(AdminBuyerCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Chop - Создание покупателей'
-        return context
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Пользователь успешно создан!')
+        return super(AdminBuyerCreateView, self).post(request, *args, **kwargs)
 
 
 class AdminBuyerUpdateView(UpdateView):
@@ -69,6 +70,11 @@ class AdminBuyerUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminBuyerUpdateView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Данные пользователя успешно изменены!')
+        return super(AdminBuyerUpdateView, self).post(request, *args, **kwargs)
+
 
 class AdminBuyerChangeActivityView(DeleteView):
     model = Buyer
@@ -78,6 +84,11 @@ class AdminBuyerChangeActivityView(DeleteView):
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminBuyerChangeActivityView, self).dispatch(request, *args, **kwargs)
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Пользователь успешно деактивирован!')
+        return super(AdminBuyerChangeActivityView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         """ overwritten delete method """
@@ -110,6 +121,11 @@ class AdminProductCreateView(CreateView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductCreateView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Продукт успешно создан!')
+        return super(AdminProductCreateView, self).post(request, *args, **kwargs)
+
 
 class AdminProductUpdateView(UpdateView):
     model = Product
@@ -122,6 +138,11 @@ class AdminProductUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductUpdateView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Продукт успешно изменён!')
+        return super(AdminProductUpdateView, self).post(request, *args, **kwargs)
+
 
 class AdminProductDeleteView(DeleteView):
     model = Product
@@ -131,6 +152,11 @@ class AdminProductDeleteView(DeleteView):
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super(AdminProductDeleteView, self).dispatch(request, *args, **kwargs)
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Продукт успешно удалён совсем!')
+        return super(AdminProductDeleteView, self).post(request, *args, **kwargs)
 
 
 """ CATEGORY """
@@ -157,6 +183,11 @@ class AdminCategoryCreateView(CreateView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryCreateView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Категория успешно создана!')
+        return super(AdminCategoryCreateView, self).post(request, *args, **kwargs)
+
 
 class AdminCategoryUpdateView(UpdateView):
     model = ProductCategory
@@ -169,6 +200,11 @@ class AdminCategoryUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryUpdateView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        self.message = messages.success(request, 'Категория успешно отредактирована!')
+        return super(AdminCategoryUpdateView, self).post(request, *args, **kwargs)
+
 
 class AdminCategoryDeleteView(DeleteView):
     model = ProductCategory
@@ -179,8 +215,18 @@ class AdminCategoryDeleteView(DeleteView):
     def dispatch(self, request, *args, **kwargs):
         return super(AdminCategoryDeleteView, self).dispatch(request, *args, **kwargs)
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def post(self, request, *args, **kwargs):
+        try:
+            result = super(AdminCategoryDeleteView, self).post(request, *args, **kwargs)
+            self.message = messages.success(request, 'Категория успешно удалена совсем!')
+        except ProtectedError:
+            self.message = messages.success(request, 'В категории остались продукты, удалите сначала их,'
+                                                     ' или перенесите в другую категорию!')
+            return HttpResponseRedirect(self.success_url)
+        return result
 
-# from django.urls import reverse
+    # from django.urls import reverse
 
 
 # @user_passes_test(lambda u: u.is_staff)
