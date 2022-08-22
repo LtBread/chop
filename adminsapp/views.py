@@ -87,7 +87,7 @@ class AdminBuyerChangeActivityView(DeleteView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Пользователь успешно деактивирован!')
+        self.message = messages.success(request, 'Пользователь успешно изменён!')
         return super(AdminBuyerChangeActivityView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
