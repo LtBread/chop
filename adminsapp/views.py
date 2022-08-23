@@ -55,7 +55,7 @@ class AdminBuyerCreateView(CreateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Пользователь успешно создан!')
+        messages.success(request, 'Пользователь успешно создан!')
         return super(AdminBuyerCreateView, self).post(request, *args, **kwargs)
 
 
@@ -72,7 +72,7 @@ class AdminBuyerUpdateView(UpdateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Данные пользователя успешно изменены!')
+        messages.success(request, 'Данные пользователя успешно изменены!')
         return super(AdminBuyerUpdateView, self).post(request, *args, **kwargs)
 
 
@@ -87,7 +87,7 @@ class AdminBuyerChangeActivityView(DeleteView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Пользователь успешно изменён!')
+        messages.success(request, 'Пользователь успешно изменён!')
         return super(AdminBuyerChangeActivityView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -123,7 +123,7 @@ class AdminProductCreateView(CreateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Продукт успешно создан!')
+        messages.success(request, 'Продукт успешно создан!')
         return super(AdminProductCreateView, self).post(request, *args, **kwargs)
 
 
@@ -140,7 +140,7 @@ class AdminProductUpdateView(UpdateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Продукт успешно изменён!')
+        messages.success(request, 'Продукт успешно изменён!')
         return super(AdminProductUpdateView, self).post(request, *args, **kwargs)
 
 
@@ -155,7 +155,7 @@ class AdminProductDeleteView(DeleteView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Продукт успешно удалён совсем!')
+        messages.success(request, 'Продукт успешно удалён совсем!')
         return super(AdminProductDeleteView, self).post(request, *args, **kwargs)
 
 
@@ -185,7 +185,7 @@ class AdminCategoryCreateView(CreateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Категория успешно создана!')
+        messages.success(request, 'Категория успешно создана!')
         return super(AdminCategoryCreateView, self).post(request, *args, **kwargs)
 
 
@@ -202,7 +202,7 @@ class AdminCategoryUpdateView(UpdateView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def post(self, request, *args, **kwargs):
-        self.message = messages.success(request, 'Категория успешно отредактирована!')
+        messages.success(request, 'Категория успешно отредактирована!')
         return super(AdminCategoryUpdateView, self).post(request, *args, **kwargs)
 
 
@@ -219,9 +219,9 @@ class AdminCategoryDeleteView(DeleteView):
     def post(self, request, *args, **kwargs):
         try:
             result = super(AdminCategoryDeleteView, self).post(request, *args, **kwargs)
-            self.message = messages.success(request, 'Категория успешно удалена совсем!')
+            messages.success(request, 'Категория успешно удалена совсем!')
         except ProtectedError:
-            self.message = messages.success(request, 'В категории остались продукты, удалите сначала их,'
+            messages.success(request, 'В категории остались продукты, удалите сначала их,'
                                                      ' или перенесите в другую категорию!')
             return HttpResponseRedirect(self.success_url)
         return result
