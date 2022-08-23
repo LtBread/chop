@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.views.generic import View
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
 
 from buyersapp.models import Buyer
@@ -19,6 +19,7 @@ class BuyerLoginView(LoginView):
     success_url = reverse_lazy('index')
     extra_context = {'title': 'Chop - Авторизация'}
     template_name = 'buyersapp/login.html'
+
 
 # def login(request):
 #     if request.method == 'POST':
@@ -37,35 +38,30 @@ class BuyerLoginView(LoginView):
 #     return render(request, 'buyersapp/login.html', context)
 
 
-# class RegistrationView(View):
-#     def get(self, request, *args, **kwargs):
-#         form = BuyerRegistrationForm()
-#         context = {
-#             'title': 'Chop - Регистрация',
-#             'form': form
-#         }
-#         return render(request, 'buyersapp/registration.html', context)
-#
-#     def post(self, request, *args, **kwargs):
+class BuyerRegistrationView(CreateView):
+    model = Buyer
+    form_class = BuyerRegistrationForm
+    success_url = reverse_lazy('buyers:login')
+    extra_context = {'title': 'Chop - Регистрация'}
+    template_name = 'buyersapp/registration.html'
+
+    def post(self, request, *args, **kwargs):
+        messages.success(request, 'Вы успешно зарегистрировались!')
+        return super().post(request, *args, **kwargs)
+
+
+# def registration(request):
+#     if request.method == 'POST':
 #         form = BuyerRegistrationForm(data=request.POST)
 #         if form.is_valid():
 #             form.save()
 #             messages.success(request, 'Вы успешно зарегистрировались!')
 #             return HttpResponseRedirect(reverse('buyers:login'))
-
-
-def registration(request):
-    if request.method == 'POST':
-        form = BuyerRegistrationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Вы успешно зарегистрировались!')
-            return HttpResponseRedirect(reverse('buyers:login'))
-    else:
-        form = BuyerRegistrationForm()
-
-    context = {'title': 'Chop - Регистрация', 'form': form}
-    return render(request, 'buyersapp/registration.html', context)
+#     else:
+#         form = BuyerRegistrationForm()
+#
+#     context = {'title': 'Chop - Регистрация', 'form': form}
+#     return render(request, 'buyersapp/registration.html', context)
 
 
 # class ProfileView(UpdateView):
