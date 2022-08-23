@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.views.generic import View
 from django.views.generic.edit import UpdateView
 from django.utils.decorators import method_decorator
@@ -12,41 +13,28 @@ from productsapp.models import Product
 from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 
 
-# class LoginView(View):
-#     def get(self, request, *args, **kwargs):
-#         form = BuyerLoginForm()
-#         context = {
-#             'title': 'Chop - Авторизация',
-#             'form': form
-#         }
-#         return render(request, 'buyersapp/login.html', context)
-#
-#     def post(self, request, *args, **kwargs):
+class BuyerLoginView(LoginView):
+    model = Buyer
+    form_class = BuyerLoginForm
+    success_url = reverse_lazy('index')
+    extra_context = {'title': 'Chop - Авторизация'}
+    template_name = 'buyersapp/login.html'
+
+# def login(request):
+#     if request.method == 'POST':
 #         form = BuyerLoginForm(data=request.POST)
 #         if form.is_valid():
 #             username = request.POST['username']
 #             password = request.POST['password']
-#             user = auth.authenticate(username, password=password)
+#             user = auth.authenticate(username=username, password=password)
 #             if user and user.is_active:
 #                 auth.login(request, user)
 #                 return HttpResponseRedirect(reverse('index'))
-
-
-def login(request):
-    if request.method == 'POST':
-        form = BuyerLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user and user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    else:
-        form = BuyerLoginForm()
-
-    context = {'title': 'Chop - Авторизация', 'form': form}
-    return render(request, 'buyersapp/login.html', context)
+#     else:
+#         form = BuyerLoginForm()
+#
+#     context = {'title': 'Chop - Авторизация', 'form': form}
+#     return render(request, 'buyersapp/login.html', context)
 
 
 # class RegistrationView(View):
