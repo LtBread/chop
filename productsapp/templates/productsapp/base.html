@@ -33,7 +33,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'buyers:profile' %}">
+                        <a class="nav-link" href="{% url 'buyers:profile' user.id %}">
                             {{ user.username }}
                             <i class="fas fa-user-circle"></i>
                         </a>
