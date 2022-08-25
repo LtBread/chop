@@ -8,7 +8,7 @@
       "name": "Худи черного цвета с монограммами adidas Originals",
       "price": "6090.00",
       "description": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.",
-      "quantity": 12,
+      "quantity": 8,
       "is_active": true
     }
   },
@@ -21,7 +21,7 @@
       "name": "Синяя куртка The North Face",
       "price": "23725.00",
       "description": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.",
-      "quantity": 23,
+      "quantity": 21,
       "is_active": true
     }
   },
@@ -73,7 +73,7 @@
       "name": "Черный рюкзак Nike Heritage",
       "price": "2340.00",
       "description": "Плотная ткань. Легкий материал.",
-      "quantity": 4,
+      "quantity": 1,
       "is_active": true
     }
   }

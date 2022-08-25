@@ -1,43 +1,51 @@
-from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import auth
-from django.urls import reverse
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.edit import CreateView, UpdateView
 
 from buyersapp.models import Buyer
-from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm
+from basketsapp.models import Basket
+from buyersapp.forms import BuyerLoginForm, BuyerRegistrationForm, BuyersProfileForm
 
 
-# Create your views here.
-
-def login(request):
-    if request.method == 'POST':
-        form = BuyerLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user and user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    else:
-        form = BuyerLoginForm()
-
-    context = {'title': 'Chop - Авторизация', 'form': form}
-    return render(request, 'buyersapp/login.html', context)
+class BuyerLoginView(LoginView):
+    model = Buyer
+    form_class = BuyerLoginForm
+    success_url = reverse_lazy('index')
+    extra_context = {'title': 'Chop - Авторизация'}
+    template_name = 'buyersapp/login.html'
 
 
-def registration(request):
-    if request.method == 'POST':
-        form = BuyerRegistrationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('buyers:login'))
-    else:
-        form = BuyerRegistrationForm()
+class BuyerRegistrationView(CreateView):
+    model = Buyer
+    form_class = BuyerRegistrationForm
+    success_url = reverse_lazy('buyers:login')
+    extra_context = {'title': 'Chop - Регистрация'}
+    template_name = 'buyersapp/registration.html'
 
-    context = {'title': 'Chop - Регистрация', 'form': form}
-    return render(request, 'buyersapp/registration.html', context)
+    def post(self, request, *args, **kwargs):
+        messages.success(request, 'Вы успешно зарегистрировались!')
+        return super().post(request, *args, **kwargs)
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class BuyerProfileView(UpdateView):
+    model = Buyer
+    form_class = BuyersProfileForm
+    template_name = 'buyersapp/profile.html'
+
+    def get_success_url(self):
+        return reverse_lazy('buyers:profile', args=(self.object.id,))
+
+    def post(self, request, *args, **kwargs):
+        messages.success(request, 'Данные успешно изменены!')
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(BuyerProfileView, self).get_context_data(**kwargs)
+        context['title'] = 'Chop - Личный кабинет'
+        context['baskets'] = Basket.objects.filter(buyer=self.object.id)
+        return context
+
+
+class BuyerLogoutView(LogoutView):
+    pass

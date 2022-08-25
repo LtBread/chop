@@ -1,14 +1,10 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 
 from buyersapp.models import Buyer
 
 
 class BuyerLoginForm(AuthenticationForm):
-    # def __init__(self, *args, **kwargs):
-    #     super(BuyerLoginForm, self).__init__(*args, **kwargs)
-    #     for field_name, field in self.fields.items():
-    #         field.widget.attrs['class'] = 'form-control'
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -45,3 +41,18 @@ class BuyerRegistrationForm(UserCreationForm):
             print('Регистрация позволена пользователям от 18 лет')
             raise forms.ValidationError('Регистрация позволена пользователям от 18 лет')
         return data
+
+
+class BuyersProfileForm(UserChangeForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4', 'readonly': True}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4', 'readonly': True}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    age = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
+
+    class Meta:
+        model = Buyer
+        fields = ('username', 'email', 'first_name', 'last_name', 'age', 'avatar')
