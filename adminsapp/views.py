@@ -62,7 +62,6 @@ class AdminBuyerCreateView(CreateView):
 class AdminBuyerUpdateView(UpdateView):
     model = Buyer
     form_class = AdminBuyersProfileForm
-    success_url = reverse_lazy('admins:buyers')
     extra_context = {'title': 'Chop - Редактирование покупателей'}
     template_name = 'adminsapp/buyers/admin-buyer-update-delete.html'
 
@@ -74,6 +73,9 @@ class AdminBuyerUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         messages.success(request, 'Данные пользователя успешно изменены!')
         return super(AdminBuyerUpdateView, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('admins:buyer_update', args=(self.object.id,))
 
 
 class AdminBuyerChangeActivityView(DeleteView):

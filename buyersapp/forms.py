@@ -36,11 +36,10 @@ class BuyerRegistrationForm(UserCreationForm):
         fields = ('username', 'email', 'first_name', 'last_name', 'age', 'password1', 'password2')
 
     def clean_age(self):
-        data = self.cleaned_data['age']
-        if data < 18:
-            print('Регистрация позволена пользователям от 18 лет')
+        age = self.cleaned_data['age']
+        if age < 18:
             raise forms.ValidationError('Регистрация позволена пользователям от 18 лет')
-        return data
+        return age
 
 
 class BuyersProfileForm(UserChangeForm):
